@@ -1,7 +1,14 @@
+//packages
 import 'package:flutter/material.dart';
 
+//screens
+import './screens/home_screen.dart';
+
+//widgets
+//providers
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,22 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
       title: 'Gym',
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("initila App"),
-      ),
-      body: const Center(
-        child: Text("hello"),
-      ),
+      routes: {
+        MyHomePage.route: (context) => MyHomePage(),
+      },
     );
   }
 }
