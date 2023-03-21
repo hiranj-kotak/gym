@@ -12,7 +12,7 @@ class GymDataProvider with ChangeNotifier {
     GymListData(
       imagePath:
           'https://firebasestorage.googleapis.com/v0/b/gymeverywhere-d0d6d.appspot.com/o/gym_owner%2Fxyz%2FScreenshot%202023-01-29%20215218.png?alt=media&token=108281e7-79b1-45b7-91b5-eba44d5f18ff',
-      titleTxt: 'Gym1',
+      titleTxt: 'SFW The GYM(Nadiad)',
       subTxt: 'Wembley, London',
       dist: 2.0,
       reviews: 80,
@@ -22,7 +22,7 @@ class GymDataProvider with ChangeNotifier {
     GymListData(
       imagePath:
           'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-      titleTxt: 'Gym2',
+      titleTxt: 'The Challenger gym',
       subTxt: 'Wembley, London',
       dist: 4.0,
       reviews: 74,
@@ -32,7 +32,7 @@ class GymDataProvider with ChangeNotifier {
     GymListData(
       imagePath:
           'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-      titleTxt: 'Gym3',
+      titleTxt: 'The muscle factory gym',
       subTxt: 'Wembley, London',
       dist: 3.0,
       reviews: 62,
@@ -42,7 +42,7 @@ class GymDataProvider with ChangeNotifier {
     GymListData(
       imagePath:
           'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-      titleTxt: 'Gym4',
+      titleTxt: 'Wellocity Prime Gym',
       subTxt: 'Wembley, London',
       dist: 7.0,
       reviews: 90,
@@ -52,7 +52,7 @@ class GymDataProvider with ChangeNotifier {
     GymListData(
       imagePath:
           'https://docs.flutter.dev/assets/images/dash/dash-fainting.gif',
-      titleTxt: 'Gym5',
+      titleTxt: 'New Fitness Point',
       subTxt: 'Wembley, London',
       dist: 2.0,
       reviews: 240,
@@ -60,10 +60,13 @@ class GymDataProvider with ChangeNotifier {
       perNight: 200,
     ),
   ];
+  List<GymListData> filtered = [];
+  bool isfilterd = false;
   List<GymListData> get items {
     if (isfavSelected) {
       return favs;
     }
+    if (isfilterd) return [...filtered];
     return [..._items];
   }
 
@@ -71,12 +74,21 @@ class GymDataProvider with ChangeNotifier {
     return _items.firstWhere((gym) => gym.titleTxt == id);
   }
 
+  void filterList(String filter) {
+    filtered = _items
+        .where((term) =>
+            term.titleTxt.toLowerCase().contains(filter.toLowerCase()))
+        .toList();
+    isfilterd = true;
+    notifyListeners();
+  }
+
   void ToggleFav() {
     isfavSelected = !isfavSelected;
     notifyListeners();
   }
-  void Notifier()
-  {
+
+  void Notifier() {
     notifyListeners();
   }
 }

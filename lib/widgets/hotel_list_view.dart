@@ -1,5 +1,6 @@
 import '../app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -42,11 +43,19 @@ class HotelListView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 1.4,
-                    child: Image.network(
-                      gymdata!.imagePath,
-                      fit: BoxFit.cover,
+                  Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: AspectRatio(
+                      aspectRatio: 1.4,
+                      child: CachedNetworkImage(
+                        imageUrl: gymdata.imagePath,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        ),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -105,21 +114,21 @@ class HotelListView extends StatelessWidget {
                                             ratingWidget: RatingWidget(
                                               full: Icon(
                                                 Icons.star_rate_rounded,
-                                                color: HotelAppTheme
-                                                        .buildLightTheme()
-                                                    .primaryColor,
+                                                color:
+                                                    AppTheme.buildLightTheme()
+                                                        .primaryColor,
                                               ),
                                               half: Icon(
                                                 Icons.star_half_rounded,
-                                                color: HotelAppTheme
-                                                        .buildLightTheme()
-                                                    .primaryColor,
+                                                color:
+                                                    AppTheme.buildLightTheme()
+                                                        .primaryColor,
                                               ),
                                               empty: Icon(
                                                 Icons.star_border_rounded,
-                                                color: HotelAppTheme
-                                                        .buildLightTheme()
-                                                    .primaryColor,
+                                                color:
+                                                    AppTheme.buildLightTheme()
+                                                        .primaryColor,
                                               ),
                                             ),
                                             itemPadding: EdgeInsets.zero,
@@ -152,8 +161,8 @@ class HotelListView extends StatelessWidget {
                                   '\₹${gymdata!.perNight}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    color: HotelAppTheme.buildLightTheme()
-                                        .primaryColor,
+                                    color:
+                                        AppTheme.buildLightTheme().primaryColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 22,
                                   ),
@@ -190,7 +199,7 @@ class HotelListView extends StatelessWidget {
                             gymdata.isFav
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color: HotelAppTheme.buildLightTheme().primaryColor,
+                            color: AppTheme.buildLightTheme().primaryColor,
                           ),
                         ),
                       ),

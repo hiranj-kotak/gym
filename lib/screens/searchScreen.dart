@@ -43,7 +43,7 @@ class _searchScreenState extends State<SearchScreen>
     final gym = Provider.of<GymDataProvider>(context);
     final gymData = gym.items;
     return Theme(
-      data: HotelAppTheme.buildLightTheme(),
+      data: AppTheme.buildLightTheme(),
       child: Container(
         child: Scaffold(
           appBar: AppBar(
@@ -103,8 +103,7 @@ class _searchScreenState extends State<SearchScreen>
                           ];
                         },
                         body: Container(
-                          color:
-                              HotelAppTheme.buildLightTheme().backgroundColor,
+                          color: AppTheme.buildLightTheme().backgroundColor,
                           child: ListView.builder(
                             itemCount: gymData.length,
                             padding: const EdgeInsets.only(top: 8),
@@ -153,7 +152,7 @@ class _searchScreenState extends State<SearchScreen>
                 padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: HotelAppTheme.buildLightTheme().backgroundColor,
+                    color: AppTheme.buildLightTheme().backgroundColor,
                     borderRadius: const BorderRadius.all(
                       Radius.circular(38.0),
                     ),
@@ -168,11 +167,14 @@ class _searchScreenState extends State<SearchScreen>
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, top: 4, bottom: 4),
                     child: TextField(
-                      onChanged: (String txt) {},
+                      onChanged: (String txt) {
+                        Provider.of<GymDataProvider>(context, listen: false)
+                            .filterList(txt);
+                      },
                       style: const TextStyle(
                         fontSize: 18,
                       ),
-                      cursorColor: HotelAppTheme.buildLightTheme().primaryColor,
+                      cursorColor: AppTheme.buildLightTheme().primaryColor,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'London...',
@@ -184,7 +186,7 @@ class _searchScreenState extends State<SearchScreen>
             ),
             Container(
               decoration: BoxDecoration(
-                color: HotelAppTheme.buildLightTheme().primaryColor,
+                color: AppTheme.buildLightTheme().primaryColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(38.0),
                 ),
@@ -208,7 +210,7 @@ class _searchScreenState extends State<SearchScreen>
                     padding: const EdgeInsets.all(16.0),
                     child: Icon(FontAwesomeIcons.magnifyingGlass,
                         size: 20,
-                        color: HotelAppTheme.buildLightTheme().backgroundColor),
+                        color: AppTheme.buildLightTheme().backgroundColor),
                   ),
                 ),
               ),
@@ -229,7 +231,7 @@ class _searchScreenState extends State<SearchScreen>
           child: Container(
             height: 24,
             decoration: BoxDecoration(
-              color: HotelAppTheme.buildLightTheme().backgroundColor,
+              color: AppTheme.buildLightTheme().backgroundColor,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey.withOpacity(0.2),
@@ -240,7 +242,7 @@ class _searchScreenState extends State<SearchScreen>
           ),
         ),
         Container(
-          color: HotelAppTheme.buildLightTheme().backgroundColor,
+          color: AppTheme.buildLightTheme().backgroundColor,
           child: Padding(
             padding:
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
@@ -291,8 +293,7 @@ class _searchScreenState extends State<SearchScreen>
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(Icons.sort,
-                                color: HotelAppTheme.buildLightTheme()
-                                    .primaryColor),
+                                color: AppTheme.buildLightTheme().primaryColor),
                           ),
                         ],
                       ),
@@ -338,7 +339,7 @@ class _searchScreenState extends State<SearchScreen>
   Widget getAppBarUI() {
     return Container(
       decoration: BoxDecoration(
-        color: HotelAppTheme.buildLightTheme().backgroundColor,
+        color: AppTheme.buildLightTheme().backgroundColor,
         boxShadow: <BoxShadow>[
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class HotelAppTheme {
+class AppTheme {
   static TextTheme _buildTextTheme(TextTheme base) {
     const String fontName = 'WorkSans';
     return base.copyWith(
