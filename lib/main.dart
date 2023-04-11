@@ -10,6 +10,7 @@ import 'screens/gym_detail.dart';
 //providers
 import './providers/gym_data.dart';
 import './providers/gym_data_provider.dart';
+import './providers/bookings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,10 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(84, 211, 194, 1),
-          appBarTheme: const AppBarTheme(
-            color: Color.fromRGBO(84, 211, 194, 1),
-          ),
+          primaryColor: Color(0xFF00B6F0),
         ),
         title: 'Gym',
         routes: {

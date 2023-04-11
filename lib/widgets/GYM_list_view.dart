@@ -90,7 +90,7 @@ class HotelListView extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          gymdata!.subTxt,
+                                          gymdata!.city,
                                           style: TextStyle(
                                               fontSize: 14,
                                               color: Colors.white
@@ -114,21 +114,15 @@ class HotelListView extends StatelessWidget {
                                             ratingWidget: RatingWidget(
                                               full: Icon(
                                                 Icons.star_rate_rounded,
-                                                color:
-                                                    AppTheme.buildLightTheme()
-                                                        .primaryColor,
+                                                color: Color(0xFF00B6F0),
                                               ),
                                               half: Icon(
                                                 Icons.star_half_rounded,
-                                                color:
-                                                    AppTheme.buildLightTheme()
-                                                        .primaryColor,
+                                                color: Color(0xFF00B6F0),
                                               ),
                                               empty: Icon(
                                                 Icons.star_border_rounded,
-                                                color:
-                                                    AppTheme.buildLightTheme()
-                                                        .primaryColor,
+                                                color: Color(0xFF00B6F0),
                                               ),
                                             ),
                                             itemPadding: EdgeInsets.zero,
@@ -161,8 +155,7 @@ class HotelListView extends StatelessWidget {
                                   '\₹${gymdata!.perNight}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    color:
-                                        AppTheme.buildLightTheme().primaryColor,
+                                    color: Color(0xFF00B6F0),
                                     fontWeight: FontWeight.w600,
                                     fontSize: 22,
                                   ),
@@ -199,7 +192,7 @@ class HotelListView extends StatelessWidget {
                             gymdata.isFav
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color: AppTheme.buildLightTheme().primaryColor,
+                            color: Color(0xFF00B6F0),
                           ),
                         ),
                       ),

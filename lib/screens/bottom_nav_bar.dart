@@ -1,10 +1,10 @@
 //packages
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:hidable/hidable.dart';
 //screens
 import 'searchScreen.dart';
 import './home_screen.dart';
-import './market_place.dart';
 import './profile_screen.dart';
 
 //widgets
@@ -19,41 +19,41 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  @override
+  final ScrollController _scrollController = ScrollController();
   int index = 0;
+  @override
   Widget build(BuildContext context) {
     final screens = [
+      SearchScreen(_scrollController),
       HomeScreen(),
-      SearchScreen(),
       // SearchScreen(),
-      MarketScreen(),
-      ProfileScreen(),
+      UserPage(),
     ];
     return Scaffold(
       body: screens[index],
-      bottomNavigationBar: CurvedNavigationBar(
-        items: [
-          Icon(
-            Icons.home_outlined,
-          ),
-          Icon(
-            Icons.search_outlined,
-          ),
-          Icon(
-            Icons.shopping_basket_outlined,
-          ),
-          Icon(
-            Icons.person_2_outlined,
-          ),
-        ],
-        index: index,
-        color: Theme.of(context).primaryColor,
-        backgroundColor: Colors.transparent,
-        onTap: (value) {
-          setState(() {
-            index = value;
-          });
-        },
+      bottomNavigationBar: Hidable(
+        controller: _scrollController,
+        child: CurvedNavigationBar(
+          items: const [
+            Icon(
+              Icons.home_outlined,
+            ),
+            Icon(
+              Icons.search_outlined,
+            ),
+            Icon(
+              Icons.person_2_outlined,
+            ),
+          ],
+          index: index,
+          color: Theme.of(context).primaryColor,
+          backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          onTap: (value) {
+            setState(() {
+              index = value;
+            });
+          },
+        ),
       ),
     );
   }

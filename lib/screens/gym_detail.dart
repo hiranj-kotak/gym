@@ -1,23 +1,109 @@
 //packages
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:http/http.dart' as http;
 //screens
 //widgets
 //providers
 import '../providers/gym_data.dart';
 
 class GymDetail extends StatefulWidget {
-  static const route = '/favs';
-
+  static const route = '/GymDetail';
   @override
   State<GymDetail> createState() => _GymDetailState();
 }
 
 class _GymDetailState extends State<GymDetail> {
+  var _razorpay = Razorpay();
   AnimationController? animationController;
 
   Animation<double>? animation;
 
   final double infoHeight = 364.0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    super.initState();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('Subscribed'),
+              content: Text('Gym Subscribed Successfully'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('ok'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pushNamed('/');
+                    final Map<String, Object> obj = ModalRoute.of(context)
+                        ?.settings
+                        .arguments as Map<String, Object>;
+                    final GymListData gymdata = obj['gymdata'] as GymListData;
+                    gymdata.subscribe(gymdata);
+                  },
+                ),
+              ],
+            ));
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text(' Not Subscribed'),
+              content: Text('Payment Failed'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('ok'),
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pushNamed('/');
+                  },
+                ),
+                TextButton(
+                  child: Text('retry'),
+                  onPressed: () {
+                    final Map<String, Object> obj = ModalRoute.of(context)
+                        ?.settings
+                        .arguments as Map<String, Object>;
+                    final GymListData gymdata = obj['gymdata'] as GymListData;
+                    doPayment(gymdata);
+                  },
+                ),
+              ],
+            ));
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+  }
+
+  @override
+  void dispose() {
+    _razorpay.clear(); // Removes all listeners
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void doPayment(GymListData gym) {
+    var options = {
+      'key': 'rzp_test_s1HlMXl4TJpW2C',
+      'amount':
+          (gym.perNight * 100).toString(), //in the smallest currency sub-unit.
+      'name': gym.titleTxt, // Generate order_id using Orders API
+      'description': 'Gym Subscription',
+      'timeout': 300, // in seconds
+      'prefill': {'contact': '8787878787', 'email': 'demo@gmail.com'}
+    };
+    _razorpay.open(options);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +161,7 @@ class _GymDetailState extends State<GymDetail> {
                           padding: const EdgeInsets.only(
                               top: 32.0, left: 18, right: 16),
                           child: Text(
-                            'Web Design\nCourse',
+                            gymdata.titleTxt,
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
@@ -93,7 +179,7 @@ class _GymDetailState extends State<GymDetail> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                '\$28.99',
+                                '₹${gymdata.perNight}',
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w200,
@@ -133,9 +219,9 @@ class _GymDetailState extends State<GymDetail> {
                             padding: const EdgeInsets.all(8),
                             child: Row(
                               children: <Widget>[
-                                getTimeBoxUI('24', 'Classe'),
+                                // getTimeBoxUI('24', 'Classe'),
                                 getTimeBoxUI('2hours', 'Time'),
-                                getTimeBoxUI('24', 'Seat'),
+                                // getTimeBoxUI('24', 'Seat'),
                               ],
                             ),
                           ),
@@ -148,7 +234,7 @@ class _GymDetailState extends State<GymDetail> {
                               padding: const EdgeInsets.only(
                                   left: 16, right: 16, top: 8, bottom: 8),
                               child: Text(
-                                'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
+                                gymdata.subTxt,
                                 textAlign: TextAlign.justify,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w200,
@@ -172,54 +258,80 @@ class _GymDetailState extends State<GymDetail> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Container(
-                                  width: 48,
-                                  height: 48,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFFFFFF),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(16.0),
-                                      ),
-                                      border: Border.all(
-                                          color: Color(0xFF3A5160)
-                                              .withOpacity(0.2)),
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Color(0xFF00B6F0),
-                                      size: 28,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
                                 Expanded(
-                                  child: Container(
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF00B6F0),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(16.0),
+                                  child: InkWell(
+                                    // onTap: () {
+                                    //   showModalBottomSheet(
+                                    //       context: context,
+                                    //       builder: (context) {
+                                    //         return Container(
+                                    //           height: 200,
+                                    //           child: Column(
+                                    //             children: [
+                                    //               Text("Select Date"),
+                                    //               Text("Select Time"),
+                                    //               Text("Select Duration"),
+                                    //               ElevatedButton(
+                                    //                   onPressed: () {
+                                    //                     Navigator.of(context)
+                                    //                         .pop();
+                                    //                   },
+                                    //                   child: Text("Book Now"))
+                                    //             ],
+                                    //           ),
+                                    //         );
+                                    //       });
+                                    // },
+
+                                    //
+                                    onTap: () => showDialog(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text('Subscribe'),
+                                        content: Text(
+                                            'Are you sure you want to subscribe?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text('NO'),
+                                            onPressed: () {
+                                              Navigator.of(ctx).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('YES'),
+                                            onPressed: () {
+                                              Navigator.of(ctx).pop();
+                                              doPayment(gymdata);
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: Color(0xFF00B6F0)
-                                                .withOpacity(0.5),
-                                            offset: const Offset(1.1, 1.1),
-                                            blurRadius: 10.0),
-                                      ],
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        'Join Course',
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 18,
-                                          letterSpacing: 0.0,
-                                          color: Colors.black,
+                                    child: Container(
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFF00B6F0),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(16.0),
+                                        ),
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              color: Color(0xFF00B6F0)
+                                                  .withOpacity(0.5),
+                                              offset: const Offset(1.1, 1.1),
+                                              blurRadius: 10.0),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Subscribe',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                            letterSpacing: 0.0,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -243,7 +355,7 @@ class _GymDetailState extends State<GymDetail> {
             top: (MediaQuery.of(context).size.width / 1.2) - 24.0 - 35,
             right: 35,
             child: Card(
-              color: Color(0xFF00B6F0),
+              color: Color(0xFF00B6F1),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0)),
               elevation: 10.0,
@@ -251,10 +363,46 @@ class _GymDetailState extends State<GymDetail> {
                 width: 60,
                 height: 60,
                 child: Center(
-                  child: Icon(
-                    Icons.favorite,
-                    color: Color(0xFFFFFFFF),
-                    size: 30,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.favorite,
+                      color: Color(0xFFFFFFFF),
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      gymdata.toggleFavorite();
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      gymdata.isFav
+                          ? ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  'Added to Favorites',
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                action: SnackBarAction(
+                                  label: 'UNDO',
+                                  onPressed: () {
+                                    gymdata.toggleFavorite();
+                                  },
+                                ),
+                              ),
+                            )
+                          : ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Removed from Favorites'),
+                                duration: Duration(seconds: 2),
+                                action: SnackBarAction(
+                                  label: 'UNDO',
+                                  onPressed: () {
+                                    gymdata.toggleFavorite();
+                                  },
+                                ),
+                              ),
+                            );
+                    },
                   ),
                 ),
               ),

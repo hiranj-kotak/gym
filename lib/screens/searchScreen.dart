@@ -1,5 +1,5 @@
 import '../widgets/calendar_popup_view.dart';
-import '../widgets/hotel_list_view.dart';
+import '../widgets/GYM_list_view.dart';
 import '../providers/gym_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,15 +8,15 @@ import '../app_theme.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
-  @override
+  final ScrollController sc;
+  SearchScreen(this.sc);
+
   _searchScreenState createState() => _searchScreenState();
 }
 
 class _searchScreenState extends State<SearchScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  final ScrollController _scrollController = ScrollController();
-
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
 
@@ -47,8 +47,9 @@ class _searchScreenState extends State<SearchScreen>
       child: Container(
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text(
-              'Explore',
+              'GYMZ',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 28,
@@ -79,7 +80,7 @@ class _searchScreenState extends State<SearchScreen>
                   children: <Widget>[
                     Expanded(
                       child: NestedScrollView(
-                        controller: _scrollController,
+                        controller: widget.sc,
                         headerSliverBuilder:
                             (BuildContext context, bool innerBoxIsScrolled) {
                           return <Widget>[
@@ -174,7 +175,7 @@ class _searchScreenState extends State<SearchScreen>
                       style: const TextStyle(
                         fontSize: 18,
                       ),
-                      cursorColor: AppTheme.buildLightTheme().primaryColor,
+                      cursorColor: Color(0xFF00B6F0),
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'London...',
@@ -186,7 +187,7 @@ class _searchScreenState extends State<SearchScreen>
             ),
             Container(
               decoration: BoxDecoration(
-                color: AppTheme.buildLightTheme().primaryColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(38.0),
                 ),
@@ -252,7 +253,7 @@ class _searchScreenState extends State<SearchScreen>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '530 hotels found',
+                      '5 Gyms  found',
                       style: TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 16,
@@ -293,7 +294,7 @@ class _searchScreenState extends State<SearchScreen>
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(Icons.sort,
-                                color: AppTheme.buildLightTheme().primaryColor),
+                                color: Theme.of(context).primaryColor),
                           ),
                         ],
                       ),
