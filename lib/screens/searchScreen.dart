@@ -3,7 +3,6 @@ import '../widgets/GYM_list_view.dart';
 import '../providers/gym_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../widgets/filters_screen.dart';
 import '../app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -271,15 +270,7 @@ class _searchScreenState extends State<SearchScreen>
                     borderRadius: const BorderRadius.all(
                       Radius.circular(4.0),
                     ),
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.push<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) => FiltersScreen(),
-                            fullscreenDialog: true),
-                      );
-                    },
+                    onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Row(

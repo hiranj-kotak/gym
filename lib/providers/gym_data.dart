@@ -43,12 +43,12 @@ class GymListData with ChangeNotifier {
     print("subscribed");
     http
         .post(Uri.parse('http://10.0.2.2:3000/subscribe'), body: {
-          "userName": "jay",
+          "userName": "Hiranj",
           "userEmail": "koladiyahit45@gmail.com",
           "fitnessCenterEmail": "koladiyahit45@gmail.com",
           "fitnessCenterName": "hammar",
-          "Date": "31-apr-2023.5",
-          "Time": "25:30 - 38:00"
+          "Date": "12-april-2023",
+          "Time": "12:00 - 2:00"
         })
         .then((value) => print('body : ${value.body} '))
         .then((value) => Bkgs.add(
